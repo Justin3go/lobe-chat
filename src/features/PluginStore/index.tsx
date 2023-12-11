@@ -1,7 +1,6 @@
-import { Icon, Modal, SpotlightCard, TabsNav } from '@lobehub/ui';
-import { Button, Empty } from 'antd';
+import { Modal, TabsNav } from '@lobehub/ui';
+import { Button } from 'antd';
 import isEqual from 'fast-deep-equal';
-import { ServerCrash } from 'lucide-react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Center, Flexbox } from 'react-layout-kit';
@@ -10,8 +9,9 @@ import MobilePadding from '@/components/MobilePadding';
 import { useToolStore } from '@/store/tool';
 import { pluginStoreSelectors } from '@/store/tool/selectors';
 
-import Loading from './Loading';
-import PluginItem from './PluginItem';
+import AddPluginButton from './AddPluginButton';
+import InstalledPluginList from './InstalledPluginList';
+import OnlineList from './OnlineList';
 
 interface PluginStoreProps {
   open?: boolean;
@@ -20,15 +20,9 @@ interface PluginStoreProps {
 export const PluginStore = memo<PluginStoreProps>(({ setOpen, open }) => {
   const { t } = useTranslation('plugin');
 
-  const [listType, useFetchPluginList, installPlugins] = useToolStore((s) => [
-    s.listType,
-    s.useFetchPluginStore,
-    s.installPlugins,
-  ]);
+  const [listType, installPlugins] = useToolStore((s) => [s.listType, s.installPlugins]);
 
   const pluginStoreList = useToolStore(pluginStoreSelectors.onlinePluginStore, isEqual);
-  const { isLoading, error } = useFetchPluginList();
-  const isEmpty = pluginStoreList.length === 0;
 
   return (
     <Modal
@@ -55,6 +49,7 @@ export const PluginStore = memo<PluginStoreProps>(({ setOpen, open }) => {
                 }}
               />
               <Flexbox gap={8} horizontal>
+                <AddPluginButton />
                 {listType === 'all' && (
                   <Button
                     onClick={() => {
@@ -66,25 +61,7 @@ export const PluginStore = memo<PluginStoreProps>(({ setOpen, open }) => {
                 )}
               </Flexbox>
             </Flexbox>
-            {isLoading ? (
-              <Loading />
-            ) : isEmpty ? (
-              <Center gap={12} padding={40}>
-                {error ? (
-                  <>
-                    <Icon icon={ServerCrash} size={{ fontSize: 80 }} />
-                    {t('store.networkError')}
-                  </>
-                ) : (
-                  <Empty
-                    description={t('store.empty')}
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  ></Empty>
-                )}
-              </Center>
-            ) : (
-              <SpotlightCard columns={2} gap={16} items={pluginStoreList} renderItem={PluginItem} />
-            )}
+            {listType === 'all' ? <OnlineList /> : <InstalledPluginList />}
           </Flexbox>
         </Center>
       </MobilePadding>
