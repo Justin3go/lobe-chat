@@ -9,6 +9,7 @@ import { LobeTool } from '@/types/tool';
 import { LobeToolCustomPlugin } from '@/types/tool/plugin';
 
 import { InstallPluginParams, pluginService } from '../plugin';
+import OpenAPI_Auth_API_Key from './openapi/OpenAPI_Auth_API_Key.json';
 import OpenAPIV2 from './openapi/OpenAPI_V2.json';
 import openAPIV3 from './openapi/OpenAPI_V3.json';
 
@@ -342,6 +343,57 @@ describe('PluginService', () => {
       const plugins = await pluginService.convertOpenAPIToPluginSchema(OpenAPIV2);
 
       expect(plugins).toMatchSnapshot();
+    });
+  });
+
+  describe('convertAuthToSettingsSchema', () => {
+    it('do not need has settings', async () => {
+      const plugins = await pluginService.convertAuthToSettingsSchema(OpenAPIV2);
+
+      expect(plugins).toEqual({
+        properties: {},
+        type: 'object',
+      });
+    });
+
+    it('can convert OpenAPI Bear key to settings', async () => {
+      const plugins = await pluginService.convertAuthToSettingsSchema(openAPIV3);
+
+      expect(plugins).toEqual({
+        properties: {
+          HTTPBearer: {
+            format: 'password',
+            description: 'HTTPBearer Bearer token',
+            type: 'string',
+            title: 'HTTPBearer',
+          },
+        },
+        type: 'object',
+        required: ['HTTPBearer'],
+      });
+    });
+
+    it('can convert OpenAPI Auth API key to settings', async () => {
+      const settings = await pluginService.convertAuthToSettingsSchema(OpenAPI_Auth_API_Key, {
+        type: 'object',
+        properties: {
+          abc: {},
+        },
+        required: ['abc', 'apiKeyAuth'],
+      });
+
+      expect(settings).toEqual({
+        properties: {
+          abc: {},
+          apiKeyAuth: {
+            title: 'X-OpenAPIHub-Key',
+            description: 'apiKeyAuth API Key',
+            type: 'string',
+          },
+        },
+        required: ['abc', 'apiKeyAuth'],
+        type: 'object',
+      });
     });
   });
 });
