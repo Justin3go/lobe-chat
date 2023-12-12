@@ -31,7 +31,6 @@ const useStyles = createStyles(({ css, token }) => ({
 
 const PluginItem = memo<InstallPluginMeta>(
   ({ identifier, createdAt, homepage, author, type, meta = {} }) => {
-    console.log(type);
     const [installed, installing, installPlugin, unInstallPlugin] = useToolStore((s) => [
       pluginSelectors.isPluginInstalled(identifier)(s),
       pluginStoreSelectors.isPluginInstallLoading(identifier)(s),
@@ -42,7 +41,7 @@ const PluginItem = memo<InstallPluginMeta>(
 
     const { t } = useTranslation('plugin');
     return (
-      <Flexbox gap={8} padding={16}>
+      <Flexbox data-type={type} gap={8} padding={16}>
         <Flexbox horizontal justify={'space-between'}>
           <Avatar avatar={meta.avatar} size={56} style={{ flex: 'none' }} />
 
