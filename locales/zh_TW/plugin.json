@@ -53,12 +53,12 @@
       "manifest": {
         "desc": "LobeChat 會使用此連結安裝外掛",
         "invalid": "輸入的 manifest 連結不正確或不符合標準",
-        "label": "外掛 Manifest 網址",
         "urlError": "請輸入有效的網址",
         "jsonInvalid": "manifest 不正確，驗證結果：\n\n {{error}}",
         "preview": "預覽 Manifest",
         "refresh": "重新載入",
-        "requestError": "連結請求失敗，請確認網址是否正確且允許跨域存取"
+        "requestError": "連結請求失敗，請確認網址是否正確且允許跨域存取",
+        "label": "插件描述檔 (Manifest) URL"
       },
       "title": {
         "desc": "外掛的名稱",
@@ -67,13 +67,11 @@
       }
     },
     "metaConfig": "外掛後設資料設定",
-    "modalDesc": "新增自訂外掛後，可用於外掛開發測試或直接在對話中使用。請參考外掛開發文件以取得更多資訊。",
     "preview": {
       "card": "外掛顯示預覽",
       "desc": "外掛描述預覽",
       "title": "外掛名稱預覽"
     },
-    "save": "儲存",
     "saveSuccess": "外掛設定已成功儲存",
     "tabs": {
       "manifest": "功能描述清單 (Manifest)",
@@ -81,13 +79,26 @@
     },
     "title": "新增自訂外掛",
     "update": "更新",
-    "updateSuccess": "外掛設定已成功更新"
+    "updateSuccess": "外掛設定已成功更新",
+    "modalDesc": "添加自訂插件後，可用於插件開發驗證，也可直接在會話中使用。插件開發請參考<1>開發文件↗</>",
+    "openai": {
+      "importUrl": "從 URL 連結匯入",
+      "schema": "Schema"
+    },
+    "save": "安裝插件",
+    "type": {
+      "lobe": "LobeChat 插件",
+      "openai": "OpenAI 插件"
+    }
   },
   "error": {
-    "fetchError": "請求失敗",
     "installError": "插件 {{name}} 安裝失敗",
-    "manifestInvalid": "描述檔格式無效",
-    "noManifest": "描述檔不存在"
+    "noManifest": "描述檔不存在",
+    "fetchError": "請求該 manifest 連結失敗，請確保連結的有效性，並檢查連結是否允許跨域訪問",
+    "manifestInvalid": "manifest 不符合規範，校驗結果: \n\n {{error}}",
+    "openAPIInvalid": "OpenAPI 解析失敗，錯誤: \n\n {{error}}",
+    "reinstallError": "插件 {{name}} 刷新失敗",
+    "urlError": "該連結沒有返回 JSON 格式的內容, 請確保是有效的連結"
   },
   "list": {
     "item": {
@@ -106,7 +117,8 @@
     "searchEngine": "搜尋引擎",
     "undefined": "正在偵測外掛...",
     "websiteCrawler": "網站爬蟲",
-    "unknown": "外掛偵測進行中..."
+    "loading": "插件檢測中...",
+    "unknown": "未知插件"
   },
   "realtimeWeather": {
     "data": {

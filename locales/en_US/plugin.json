@@ -53,12 +53,12 @@
       "manifest": {
         "desc": "LobeChat will install the plugin using this link",
         "invalid": "The input manifest link is invalid or does not comply with the specification",
-        "label": "Plugin Manifest URL",
         "urlError": "Please enter a valid URL",
         "jsonInvalid": "The manifest is not valid, validation result: \n\n {{error}}",
         "preview": "Preview Manifest",
         "refresh": "Refresh",
-        "requestError": "Failed to request the link, please enter a valid link and check if the link allows cross-origin access"
+        "requestError": "Failed to request the link, please enter a valid link and check if the link allows cross-origin access",
+        "label": "Plugin Description (Manifest) URL"
       },
       "title": {
         "desc": "The title of the plugin",
@@ -67,13 +67,11 @@
       }
     },
     "metaConfig": "Plugin metadata configuration",
-    "modalDesc": "After adding a custom plugin, it can be used for plugin development verification or directly in conversations. Please refer to the plugin development documentation for more information.",
     "preview": {
       "card": "Preview of plugin display",
       "desc": "Preview of plugin description",
       "title": "Plugin Name Preview"
     },
-    "save": "Save",
     "saveSuccess": "Plugin settings saved successfully",
     "tabs": {
       "manifest": "Function Description Manifest (Manifest)",
@@ -81,13 +79,26 @@
     },
     "title": "Add Custom Plugin",
     "update": "Update",
-    "updateSuccess": "Plugin settings updated successfully"
+    "updateSuccess": "Plugin settings updated successfully",
+    "modalDesc": "After adding a custom plugin, it can be used for plugin development verification or directly in the session. Please refer to the <1>development documentation↗</> for plugin development.",
+    "openai": {
+      "importUrl": "Import from URL link",
+      "schema": "Schema"
+    },
+    "save": "Install Plugin",
+    "type": {
+      "lobe": "LobeChat Plugin",
+      "openai": "OpenAI Plugin"
+    }
   },
   "error": {
-    "fetchError": "Request failed",
     "installError": "Plugin {{name}} installation failed",
-    "manifestInvalid": "Invalid manifest file format",
-    "noManifest": "Manifest file does not exist"
+    "noManifest": "Manifest file does not exist",
+    "fetchError": "Failed to fetch the manifest link. Please ensure the link is valid and allows cross-origin access.",
+    "manifestInvalid": "The manifest does not conform to the specification. Validation result: \n\n {{error}}",
+    "openAPIInvalid": "OpenAPI parsing failed. Error: \n\n {{error}}",
+    "reinstallError": "Failed to refresh plugin {{name}}",
+    "urlError": "The link did not return content in JSON format. Please ensure it is a valid link."
   },
   "list": {
     "item": {
@@ -106,7 +117,8 @@
     "searchEngine": "Search Engine",
     "undefined": "Plugin Detection...",
     "websiteCrawler": "Website Crawler",
-    "unknown": "Plugin detection in progress..."
+    "loading": "Detecting plugins...",
+    "unknown": "Unknown Plugin"
   },
   "realtimeWeather": {
     "data": {
