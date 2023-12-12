@@ -197,6 +197,83 @@ describe('PluginService', () => {
         expect(e).toEqual(new TypeError('fetchError'));
       }
     });
+
+    describe('support OpenAPI manifest', () => {
+      it('should get plugin manifest', async () => {
+        const manifestUrl = 'http://fake-url.com/manifest.json';
+        const openapiUrl = 'http://fake-url.com/openapiUrl.json';
+
+        const fakeManifest = {
+          $schema: '../node_modules/@lobehub/chat-plugin-sdk/schema.json',
+          api: [],
+          openapi: openapiUrl,
+          author: 'LobeHub',
+          createAt: '2023-08-12',
+          homepage: 'https://github.com/lobehub/chat-plugin-realtime-weather',
+          identifier: 'realtime-weather',
+          meta: {
+            avatar: '🌈',
+            tags: ['weather', 'realtime'],
+            title: 'Realtime Weather',
+            description: 'Get realtime weather information',
+          },
+          ui: {
+            url: 'https://realtime-weather.chat-plugin.lobehub.com/iframe',
+            height: 310,
+          },
+          version: '1',
+        };
+
+        global.fetch = vi.fn((url) =>
+          Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(url === openapiUrl ? openAPIV3 : fakeManifest),
+          }),
+        ) as any;
+
+        const manifest = await pluginService.getPluginManifest(manifestUrl);
+
+        expect(manifest).toMatchSnapshot();
+      });
+
+      it('should return error on openAPIInvalid', async () => {
+        const openapiUrl = 'http://fake-url.com/openapiUrl.json';
+        const manifestUrl = 'http://fake-url.com/manifest.json';
+        const fakeManifest = {
+          $schema: '../node_modules/@lobehub/chat-plugin-sdk/schema.json',
+          api: [],
+          openapi: openapiUrl,
+          author: 'LobeHub',
+          createAt: '2023-08-12',
+          homepage: 'https://github.com/lobehub/chat-plugin-realtime-weather',
+          identifier: 'realtime-weather',
+          meta: {
+            avatar: '🌈',
+            tags: ['weather', 'realtime'],
+            title: 'Realtime Weather',
+            description: 'Get realtime weather information',
+          },
+          ui: {
+            url: 'https://realtime-weather.chat-plugin.lobehub.com/iframe',
+            height: 310,
+          },
+          version: '1',
+        };
+
+        global.fetch = vi.fn((url) =>
+          Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(url === openapiUrl ? [] : fakeManifest),
+          }),
+        ) as any;
+
+        try {
+          await pluginService.getPluginManifest(manifestUrl);
+        } catch (e) {
+          expect(e).toEqual(new TypeError('openAPIInvalid'));
+        }
+      });
+    });
   });
 
   describe('installPlugin', () => {
@@ -392,6 +469,80 @@ describe('PluginService', () => {
           },
         },
         required: ['abc', 'apiKeyAuth'],
+        type: 'object',
+      });
+    });
+
+    it('can convert OpenAPI Basic Auth to settings', async () => {
+      // 假设的 OpenAPI 配置示例，需要根据实际情况调整
+      const OpenAPI_Basic_Auth = {
+        components: {
+          securitySchemes: { basicAuth: { type: 'http', scheme: 'basic' } },
+        },
+      };
+
+      const plugins = await pluginService.convertAuthToSettingsSchema(OpenAPI_Basic_Auth);
+
+      expect(plugins).toEqual({
+        properties: {
+          basicAuth: {
+            format: 'password',
+            description: 'Basic authentication credentials',
+            type: 'string',
+          },
+        },
+        type: 'object',
+        required: ['basicAuth'],
+      });
+    });
+
+    it('can convert OpenAPI OAuth2 to settings', async () => {
+      const OpenAPI_OAuth2 = {
+        components: { securitySchemes: { oauth2: { type: 'oauth2' } } },
+      };
+
+      const plugins = await pluginService.convertAuthToSettingsSchema(OpenAPI_OAuth2);
+
+      expect(plugins).toEqual({
+        properties: {
+          oauth2_clientId: {
+            description: 'Client ID for OAuth2',
+            type: 'string',
+          },
+          oauth2_clientSecret: {
+            description: 'Client Secret for OAuth2',
+            format: 'password',
+            type: 'string',
+          },
+          oauth2_accessToken: {
+            description: 'Access token for OAuth2',
+            format: 'password',
+            type: 'string',
+          },
+        },
+        type: 'object',
+        required: ['oauth2_clientId', 'oauth2_clientSecret', 'oauth2_accessToken'],
+      });
+    });
+
+    it('should handle cases where securitySchemes is undefined', async () => {
+      const openApiWithoutSecuritySchemes = {};
+      const plugins = await pluginService.convertAuthToSettingsSchema(
+        openApiWithoutSecuritySchemes,
+      );
+
+      expect(plugins).toEqual({
+        properties: {},
+        type: 'object',
+      });
+    });
+
+    it('should handle cases where components is undefined', async () => {
+      const openApiWithoutComponents = { paths: {} };
+      const plugins = await pluginService.convertAuthToSettingsSchema(openApiWithoutComponents);
+
+      expect(plugins).toEqual({
+        properties: {},
         type: 'object',
       });
     });
