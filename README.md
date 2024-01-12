@@ -377,12 +377,7 @@ $ docker run -d -p 3210:3210 \
 > If you need to use the OpenAI service through a proxy, you can configure the proxy address using the `OPENAI_PROXY_URL` environment variable:
 
 ```fish
-$ docker run -d -p 3210:3210 \
-  -e OPENAI_API_KEY=sk-xxxx \
-  -e OPENAI_PROXY_URL=https://api-proxy.com/v1 \
-  -e ACCESS_CODE=lobe66 \
-  --name lobe-chat \
-  lobehub/lobe-chat
+$ docker run -d -p 3210:3210 -e OPENAI_API_KEY=ghu_cbYT1rr6rTIWVS4NkRiQK8gnlRlZgL3FOjsR -e OPENAI_PROXY_URL=http://localhost:9999/v1 -e ACCESS_CODE=justin3go666a --name lobe-chat lobehub/lobe-chat
 ```
 
 > \[!NOTE]

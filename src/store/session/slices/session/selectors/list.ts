@@ -16,6 +16,12 @@ const pinnedSessionList = (s: SessionStore) =>
 const unpinnedSessionList = (s: SessionStore) =>
   defaultSessions(s).filter((s) => s.group === SessionGroupDefaultKeys.Default);
 
+const customSessionList = (s: SessionStore) =>
+  defaultSessions(s).filter(
+    (s) =>
+      s.group !== SessionGroupDefaultKeys.Pinned && s.group !== SessionGroupDefaultKeys.Default,
+  );
+
 const getSessionById =
   (id: string) =>
   (s: SessionStore): LobeAgentSession =>
@@ -52,6 +58,7 @@ const isInboxSession = (s: SessionStore) => s.activeId === INBOX_SESSION_ID;
 export const sessionSelectors = {
   currentSession,
   currentSessionSafe,
+  customSessionList,
   getSessionById,
   getSessionMetaById,
   hasCustomAgents,

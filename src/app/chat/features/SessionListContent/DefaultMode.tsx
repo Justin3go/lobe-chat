@@ -16,6 +16,8 @@ const SessionListContent = memo(() => {
   const { t } = useTranslation('chat');
   const unpinnedSessionList = useSessionStore(sessionSelectors.unpinnedSessionList, isEqual);
   const pinnedList = useSessionStore(sessionSelectors.pinnedSessionList, isEqual);
+  const customSessionList = useSessionStore(sessionSelectors.customSessionList, isEqual);
+  console.log('customSessionList', customSessionList);
   const hasPinnedSessionList = useSessionStore(sessionSelectors.hasPinnedSessionList);
 
   const [sessionGroupKeys, updatePreference] = useGlobalStore((s) => [

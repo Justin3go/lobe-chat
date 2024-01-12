@@ -31,3 +31,8 @@ export const dbSchemaV3 = {
   plugins:
     '&identifier, type, manifest.type, manifest.meta.title, manifest.meta.description, manifest.meta.author, createdAt, updatedAt',
 };
+
+export const dbSchemaV4 = {
+  ...dbSchemaV3,
+  groups: '&id, name, createdAt, updatedAt',
+};

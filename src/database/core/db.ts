@@ -2,15 +2,17 @@ import Dexie from 'dexie';
 
 import { DBModel } from '@/database/core/types/db';
 import { DB_File } from '@/database/schemas/files';
+import { DB_Group } from '@/database/schemas/group';
 import { DB_Message } from '@/database/schemas/message';
 import { DB_Plugin } from '@/database/schemas/plugin';
 import { DB_Session } from '@/database/schemas/session';
 import { DB_Topic } from '@/database/schemas/topic';
 
-import { dbSchemaV1, dbSchemaV2, dbSchemaV3 } from './schemas';
+import { dbSchemaV1, dbSchemaV2, dbSchemaV3, dbSchemaV4 } from './schemas';
 
 interface LobeDBSchemaMap {
   files: DB_File;
+  groups: DB_Group;
   messages: DB_Message;
   plugins: DB_Plugin;
   sessions: DB_Session;
@@ -20,6 +22,7 @@ interface LobeDBSchemaMap {
 // Define a local DB
 export class LocalDB extends Dexie {
   public files: LobeDBTable<'files'>;
+  public groups: LobeDBTable<'groups'>;
   public sessions: LobeDBTable<'sessions'>;
   public messages: LobeDBTable<'messages'>;
   public topics: LobeDBTable<'topics'>;
@@ -30,8 +33,10 @@ export class LocalDB extends Dexie {
     this.version(1).stores(dbSchemaV1);
     this.version(2).stores(dbSchemaV2);
     this.version(3).stores(dbSchemaV3);
+    this.version(4).stores(dbSchemaV4);
 
     this.files = this.table('files');
+    this.groups = this.table('groups');
     this.sessions = this.table('sessions');
     this.messages = this.table('messages');
     this.topics = this.table('topics');
