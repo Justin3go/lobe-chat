@@ -39,15 +39,15 @@ const GalleyGrid = memo<GalleyGridProps>(({ items, renderItem: Render }) => {
 
   return (
     <Flexbox gap={gap}>
-      <Grid col={firstRow.length} gap={gap} max={max}>
+      <Grid col={firstRow.length} gap={gap} key="firstRow" max={max}>
         {firstRow.map((i, index) => (
           <Render {...i} key={index} />
         ))}
       </Grid>
       {lastRow.length > 0 && (
-        <Grid col={lastRow.length > 2 ? 3 : lastRow.length} gap={gap} max={max}>
+        <Grid col={lastRow.length > 2 ? 3 : lastRow.length} gap={gap} key="lastRow" max={max}>
           {lastRow.map((i, index) => (
-            <Render {...i} key={index} />
+            <Render {...i} key={index + 2} />
           ))}
         </Grid>
       )}
